@@ -8,6 +8,8 @@
 
 #define TRANSMIT_PIN 4  // Define the pin to transmit RF signals
 #define SEQUENCE_LENGTH 4  // Define the number of bits for the De Bruijn sequence
+#define LED_PIN 13  // Built-in LED pin for most Arduino boards
+
 
 RCSwitch rfSwitch = RCSwitch();  // Initialize RCSwitch
 
@@ -25,12 +27,15 @@ void generateDeBruijn(int bits) {
 
 // Function to transmit a binary value using RF
 void transmitValue(int value, int bitLength) {
+  digitalWrite(LED_PIN, HIGH);  // Turn LED on
   rfSwitch.send(value, bitLength);  // Transmit the binary value as an RF signal
   Serial.print("Transmitting: ");
   Serial.println(value, BIN);  // Print the binary value to the Serial Monitor
+  digitalWrite(LED_PIN, LOW);  // Turn LED off
 }
 
 void setup() {
+  pinMode(LED_PIN, OUTPUT);  // Set LED pin as output
   Serial.begin(115200);
   rfSwitch.enableTransmit(TRANSMIT_PIN);  // Enable transmission on the defined pin
   Serial.println("Starting De Bruijn Sequence Generation...");
